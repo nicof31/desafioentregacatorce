@@ -8,45 +8,13 @@ const router = Router();
 const cartController = new CartsController();
 
 
-    //----------BUSQUEDA POR LIMIT----------------------
-//http://localhost:8080/api/carts/
-//http://localhost:8080/api/carts/?limit=2
 router.get("/", [passportCall("jwt"), authToken], cartController.getAllCarts);
+router.get("/:cid", [passportCall("jwt"), authToken], cartController.getIdCarts);
+router.post("/:pid", [passportCall("jwt"), handlePolicies(["USER","PREMIUM"]), authToken], cartController.addToCart);
+router.post("/:cid/purchase",[passportCall("jwt"), authToken],cartController.purchaseCart);
+router.put("/:cid/products/:pid", [passportCall("jwt"), authToken], cartController.updateCarts)
+router.put("/:cid", [passportCall("jwt"), authToken], cartController.updateCartsComplet)
+router.delete("/:cid", [passportCall("jwt"), authToken], cartController.deleteProductCarts)
+router.delete("/:cid/products/:pid", [passportCall("jwt"), authToken], cartController.deleteOneProdCarts)
 
-  //---------------------GET POPULATE---------------------
-  //Opcion A: se usa para abrir el carrito http://localhost:8080/api/carts/:cid , esta opcion permite hacer la compra
-
-    router.get("/:cid", [passportCall("jwt"), authToken], cartController.getIdCarts);
-
-//---------------------POST ADD CARTS ---------------------
-    //aumentar cantidad y disminuir cantidad debe estar logueado
-    //http://localhost:8080/api/carts/:pid/?accion=aumentar
-    //http://localhost:8080/api/carts/:pid/?accion=disminuir
-    //:pid= id de producto
-    router.post("/:pid", [passportCall("jwt"), handlePolicies(["USER","PREMIUM"]), authToken], cartController.addToCart);
-
-//---------------------PURCHASE ---------------------
-    //aumentar cantidad y disminuir cantidad debe estar logueado
-    //http://localhost:8080/api/carts/${productId}/?accion=aumentar
-    //http://localhost:8080/api/carts/:cid/purchase
-    router.post("/:cid/purchase",[passportCall("jwt"), authToken],cartController.purchaseCart);
-
-//---------------------PUT MODIFICAR CANTIDAD---------------------
-  //  router.put("/:cid/products/:pid", [passportCall("jwt"), handlePolicies(["ADMIN","USER"])], cartController.updateCarts)
-    router.put("/:cid/products/:pid", [passportCall("jwt"), authToken], cartController.updateCarts)
-
-
-//---------------------PUT MODIFICAR COMPLETO---------------------
-    router.put("/:cid", [passportCall("jwt"), authToken], cartController.updateCartsComplet)
-
-//---------------------DELETE TODOS LOS PRODUCTOS DEL CARRITO---------------------
-// http://localhost:8080/api/carts/:cid
-    router.delete("/:cid", [passportCall("jwt"), authToken], cartController.deleteProductCarts)
-
-//---------------------DELETE PRODUCTO DEL CARRITO---------------------
-// http://localhost:8080/api/carts/:cid/products/:pid
-    router.delete("/:cid/products/:pid", [passportCall("jwt"), authToken], cartController.deleteOneProdCarts)
-
-
-    
 export default router

@@ -8,8 +8,6 @@ import MessagesController from "../controllers/messages.controller.js";
 const router = Router();
 const messagesController = new MessagesController();
 
-//------------MESSAGES-----------------------
-
 router.get('/', [passportCall("jwt"), handlePolicies(["USER"]), authToken], messagesController.getMessages);
 router.post('/', [passportCall("jwt"), handlePolicies(["USER"]), authToken], messagesController.sendMessages);
 
